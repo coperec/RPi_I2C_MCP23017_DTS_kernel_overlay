@@ -1,0 +1,72 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709";
+
+fragment@0 {
+    target = <&i2c1>;
+    __overlay__ {
+        status = "okay";
+    };
+};
+
+fragment@1 {
+    target = <&gpio>;
+    __overlay__ {
+        mcp23017_pins: mcp23017_pins {
+            brcm,pins = <24>;
+            brcm,function = <0>;
+        };
+    };
+};
+
+
+
+fragment@2 {
+    target = <&i2c1>;
+    __overlay__ {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        mcp20:mcp23017@20 {
+            compatible = "microchip,mcp23017";
+            reg = <0x20>;
+            gpio-controller;
+            #gpio-cells = <2>;
+
+            interrupt-parent = <&gpio>;
+            interrupts = <24 2>;
+            interrupt-controller;
+            #interrupt-cells=<2>;
+            microchip,irq-mirror;
+
+            status = "okay";
+        };
+
+    };
+};
+
+fragment@3 {
+    target = <&i2c1>;
+    __overlay__ {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        mcp21:mcp23017@21 {
+            compatible = "microchip,mcp23017";
+            reg = <0x21>;
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-parent = <&gpio>;
+            interrupts = <13 2>;
+            interrupt-controller;
+            #interrupt-cells=<2>;
+            microchip,irq-mirror;
+
+            status = "okay";
+        };
+
+    };
+};
+};
